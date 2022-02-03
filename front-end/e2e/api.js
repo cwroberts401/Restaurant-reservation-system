@@ -59,7 +59,10 @@ async function createReservation(reservation, signal) {
     body: JSON.stringify({ data: reservation }),
     signal,
   };
-  return await fetchJson(url, options, reservation);
+  console.log("reser:", reservation);
+  const res = await fetchJson(url, options, reservation);
+  console.log("res", res);
+  return res;
 }
 
 /**
