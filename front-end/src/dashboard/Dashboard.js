@@ -57,8 +57,8 @@ function Dashboard({ date }) {
         <button type="button" className="btn btn-outline-primary" onClick ={nextHandler}>Next</button>
       </div>
       <div className="card my-2">
-        <div className="card-header"> <span class="oi oi-calendar"/> Reservations  
-          <span class="badge badge-primary text-white ml-2"> {date} </span> 
+        <div className="card-header"> <span className="oi oi-calendar"/> Reservations  
+          <span className="badge badge-primary text-white ml-2"> {date} </span> 
           <Link to="/reservations/new" className="btn btn-success btn-sm float-right"> + </Link>
         </div>
 
@@ -66,7 +66,7 @@ function Dashboard({ date }) {
       </div>
       <ErrorAlert error={ reservationsError }/>
       <div className="card my-2">
-        <div className="card-header"> <span class="oi oi-list" /> Tables 
+        <div className="card-header"> <span className="oi oi-list" /> Tables 
         <Link to="/tables/new" className="btn btn-success btn-sm float-right"> + </Link>   
         </div> 
         <ListTables/>

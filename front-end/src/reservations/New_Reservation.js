@@ -178,7 +178,7 @@ function Reservations() {
       {errors.length > 0 && <div  className="alert alert-danger"> {errors.map((error) => (<p>{error.message}</p>))}</div>}
       <ErrorAlert error={ apiError }/>
       <div className="card">
-          <div className="card-header"> New Reservation </div>
+          <div className="card-header"> {reservation_id? "Edit Reservation":"New Reservation"} </div>
       <form onSubmit={handleSubmit} className="card-body">
       
         <div className="container">
