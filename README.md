@@ -26,7 +26,7 @@ This component allows users to easily create new reservation. Once all required 
 This page allows users to quickly search for a reservation by phone number. All reservation statuses appear on this page. 
 
 
-## Installation
+## Local Installation
 
 1. Fork and clone this repository.
 1. Run `cp ./back-end/.env.sample ./back-end/.env`.
