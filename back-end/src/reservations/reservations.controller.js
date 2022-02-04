@@ -85,18 +85,17 @@ function validTime(req, res, next) {
 }
 
 function addADay(currentDate) {
-  let [ year, month, day ] = currentDate.split("-");
-  month -= 1;
-  const date = new Date(year, month, day);
-  date.setMonth(date.getMonth());
-  date.setDate(date.getDate() + 1);
-  return asDateString(date);
+	let [ year, month, day ] = currentDate.split('-');
+	month -= 1;
+	const date = new Date(year, month, day);
+	date.setMonth(date.getMonth());
+	date.setDate(date.getDate() + 1);
+	return asDateString(date);
 }
 
 function validDay(req, res, next) {
 	let reservation = req.body.data;
-  let offset = req.body.offset;
-  console.log("offset", offset)
+	let offset = req.body.offset;
 
 	// check time is in HH:MM format
 	const timeRegex = /\d{2}\:\d{2}/g;
@@ -117,30 +116,27 @@ function validDay(req, res, next) {
 	}
 
 	// get current date & time as ISO string
-  const currentDate = new Date()
+	const currentDate = new Date();
 	const currentUTCDate = currentDate.toISOString().slice(0, 10);
 	const currentUTCTime = currentDate.toISOString().slice(11, 16);
 
 	// convert reservation date & time to ISO string
-  const totalInMinutes = (parseInt(reservation.reservation_time.split(":")[0]) * 60) + parseInt(reservation.reservation_time.split(":")[1]);
-  const UTCInMinutes = totalInMinutes + offset;
+	const totalInMinutes =
+		parseInt(reservation.reservation_time.split(':')[0]) * 60 +
+		parseInt(reservation.reservation_time.split(':')[1]);
+	const UTCInMinutes = totalInMinutes + offset;
 
-  let H = Math.floor(UTCInMinutes / 60);
-  let M = UTCInMinutes % 60
+	let H = Math.floor(UTCInMinutes / 60);
+	let M = UTCInMinutes % 60;
 
-  let resUTCDate = reservation.reservation_date;
+	let resUTCDate = reservation.reservation_date;
 
-  if (H > 24){
-    H = H - 24;
-    resUTCDate = addADay(resUTCDate)
-  }
-
+	if (H > 24) {
+		H = H - 24;
+		resUTCDate = addADay(resUTCDate);
+	}
 
 	const resUTCTime = H + ':' + M;
-
-  console.log("resUTCDate", resUTCDate)
-  console.log("resUTCTime", resUTCTime)
-	
 
 	const invalidDay = 'Cannot make reservation for that day,';
 
@@ -151,8 +147,6 @@ function validDay(req, res, next) {
 		});
 	}
 
-  console.log("resUTCDate", resUTCDate);
-  console.log("currentUTCDate", currentUTCDate);
 	if (resUTCDate < currentUTCDate) {
 		return next({
 			status: 400,
@@ -161,10 +155,10 @@ function validDay(req, res, next) {
 	}
 
 	if (resUTCDate === currentUTCDate && resUTCTime < currentUTCTime) {
-			return next({
-				status: 400,
-				message: `${invalidDay} time must be in the future. resUTCTime:${resUTCTime} currentUTCTime:${currentUTCTime} currentDate:${currentDate} resUTC: ${resUTC}`
-			});
+		return next({
+			status: 400,
+			message: `${invalidDay} time must be in the future. resUTCTime:${resUTCTime} currentUTCTime:${currentUTCTime} currentDate:${currentDate} resUTC: ${resUTC}`
+		});
 	}
 
 	next();
@@ -268,7 +262,12 @@ module.exports = {
 		asyncErrorBoundary(create)
 	],
 	read: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(read) ],
-	updateStatus: [ asyncErrorBoundary(reservationExists), validStatus, statusNotFinished, asyncErrorBoundary(updateStatus) ],
+	updateStatus: [
+		asyncErrorBoundary(reservationExists),
+		validStatus,
+		statusNotFinished,
+		asyncErrorBoundary(updateStatus)
+	],
 	edit: [
 		asyncErrorBoundary(reservationExists),
 		statusNotCancelled,

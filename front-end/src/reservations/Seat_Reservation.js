@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { seatTable, listTables, getReservation } from '../utils/api';
+import ErrorAlert from '../layout/ErrorAlert';
+
 
 function Seat() {
 	const history = useHistory();
 
 	const [ errors, setErrors ] = useState([]);
+	const [ apiError, setApiError ] = useState(null);
 	const [ tables, setTables ] = useState([]);
 	const [ reservation, setReservation ] = useState({});
 
@@ -16,11 +19,17 @@ function Seat() {
 			async function loadSeatTable() {
 				const abortController = new AbortController();
 
+				try {
 				const tables = await listTables(abortController.signal);
 				setTables(tables);
 				const reservation = await getReservation(reservation_id, abortController.signal);
 				setReservation(reservation);
-				return null;
+				return null;}
+				catch (e) {
+					setApiError(e);
+					return () => abortController.abort();
+				}
+
 			}
 			loadSeatTable();
 		},
@@ -42,10 +51,18 @@ function Seat() {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
+		setApiError(null);
+		setErrors([]);
+		const abortController = new AbortController();
+
 
 		setErrors([]);
 		if (handleValidation()) {
-			await seatTable(formData.table_id, reservation_id, AbortController.signal);
+			try { await seatTable(formData.table_id, reservation_id, AbortController.signal); }
+			catch (e) {
+				setApiError(e);
+				return () => abortController.abort();
+			}
 			history.push(`/`);
 		} else {
       return null;
@@ -91,13 +108,14 @@ function Seat() {
 
 	return (
 		<div>
+			<ErrorAlert error={apiError} />
 			{errors.length > 0 && (
 				<div className="alert alert-danger"> {errors.map((error) => <p key={error.message}>{error.message}</p>)}</div>
 			)}
 			<div className="card">
 				<div className="card-header">
 					Seating
-					<span class="badge bg-primary text-white">
+					<span className="badge bg-primary text-white">
 						{reservation.last_name} party of {reservation.people}
 					</span>
 				</div>

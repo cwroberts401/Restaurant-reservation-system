@@ -60,7 +60,6 @@ export async function createReservation(reservation, timezoneOffset, signal) {
 export async function editReservation(reservation_id, reservation, timezoneOffset, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
   const body = JSON.stringify({ data: reservation, offset: timezoneOffset });
-  console.log("edit body", body)
   return await fetchJson(url,{headers, signal, method: "PUT", body}, []);
 }
 
@@ -84,22 +83,18 @@ export async function seatTable(tableId, reservationId, signal) {
 export async function finishTable(tableId, reservationId, signal) {
   const url = new URL(`${API_BASE_URL}/tables/${tableId}/seat`);
   const body = JSON.stringify({ data: {reservation_id: reservationId } });
-  await fetchJson(url, {headers, signal, method: "DELETE", body});
-  return null;
+  return await fetchJson(url, {headers, signal, method: "DELETE", body});
 }
 
 export async function updateTableStatus(tableId, status, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/${tableId}/status`);
   const body = JSON.stringify({data: { status: status } });
-  //console.log("status body: ", body)
-  await fetchJson(url, {headers, signal, method: "PUT", body});
-  return null;
+  return await fetchJson(url, {headers, signal, method: "PUT", body});
 }
 
 export async function search(mobile_number, signal) {
   const url = new URL(`${API_BASE_URL}/reservations?mobile_phone${mobile_number}`);
-  const data = await fetchJson(url, {headers, signal, method: "GET"});
-  return data;
+  return await fetchJson(url, {headers, signal, method: "GET"});
 }
 
 /**

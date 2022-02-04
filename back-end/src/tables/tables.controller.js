@@ -111,7 +111,7 @@ function validateSeatedStatus(req, res, next) {
 
 module.exports = {
 	create: [ hasRequiredPropertiesCreate, table_nameIsValid, capacityIsValid, asyncErrorBoundary(create) ],
-	list,
+	list: [asyncErrorBoundary(list)],
 	seat: [
 		hasRequiredPropertiesSeat,
 		asyncErrorBoundary(reservationExists),
