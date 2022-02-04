@@ -133,14 +133,11 @@ function validDay(req, res, next) {
 		});
 	}
 
-	if (resUTCDate === currentUTCDate) {
-		if (resUTCTime < currentUTCTime) {
+	if (resUTCDate === currentUTCDate && resUTCTime < currentUTCTime) {
 			return next({
 				status: 400,
 				message: `${invalidDay} time must be in the future.`
 			});
-		}
-		return next();
 	}
 
 	next();
