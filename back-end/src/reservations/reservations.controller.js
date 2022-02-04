@@ -124,6 +124,8 @@ function validDay(req, res, next) {
 		});
 	}
 
+  console.log("resUTCDate", resUTCDate);
+  console.log("currentUTCDate", currentUTCDate);
 	if (resUTCDate < currentUTCDate) {
 		return next({
 			status: 400,
