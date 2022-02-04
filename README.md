@@ -22,7 +22,7 @@ A "finish" button appears dynamically when a reservation is seated, when the fin
 This component allows users to easily create new reservation. Once all required fields are filled out the time and date are validated to make sure they fall within the restaurant's operating hours
 
 ### Search
-1[](https://github.com/cwroberts401/starter-restaurant-reservation/blob/main/search.png)
+![](https://github.com/cwroberts401/starter-restaurant-reservation/blob/main/search.png)
 This page allows users to quickly search for a reservation by phone number. All reservation statuses appear on this page. 
 
 
