@@ -106,8 +106,9 @@ function validDay(req, res, next) {
 	}
 
 	// get current date & time as ISO string
-	const currentDate = new Date().toISOString().slice(0, 10);
-	const currentTime = new Date().toISOString().slice(11, 16);
+  const currentDate = new Date()
+	const currentUTCDate = currentDate.toISOString().slice(0, 10);
+	const currentUTCTime = currentDate.toISOString().slice(11, 16);
 
 	// convert reservation date & time to ISO string
 	const resUTC = new Date(`${reservation.reservation_date}T${reservation.reservation_time}`);
@@ -123,15 +124,15 @@ function validDay(req, res, next) {
 		});
 	}
 
-	if (resUTCDate < currentDate) {
+	if (resUTCDate < currentUTCDate) {
 		return next({
 			status: 400,
 			message: `${invalidDay} date must be in the future.`
 		});
 	}
 
-	if (resUTCDate === currentDate) {
-		if (resUTCTime < currentTime) {
+	if (resUTCDate === currentUTCDate) {
+		if (resUTCTime < currentUTCTime) {
 			return next({
 				status: 400,
 				message: `${invalidDay} time must be in the future.`

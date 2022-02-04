@@ -119,9 +119,6 @@ function Reservations() {
         let resUTCDate = 0;
         let resUTCTime = 0;
         if (formData.reservation_date.includes("Z")){
-            console.log("date",formData.reservation_date)
-            let localDate = new Date(formData.reservation_date);
-            console.log("localDate", localDate.toString)
             resUTCDate = formData.reservation_date.slice(0, 10);
             formData.reservation_date = resUTCDate;
             resUTCTime = formData.reservation_time.slice(0, 5);
