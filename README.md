@@ -10,6 +10,7 @@ The live site deployed with Heroku can be found here: [https://cr-reservation-cl
 
 ## Features
 ### Dashboard
+![](https://github.com/cwroberts401/starter-restaurant-reservation/blob/main/dashboard.png)
 This is the main interface with the site, here users have access to all reservation and table listings so they can clearly see the status of everything. 
 
 ### Table Status
