@@ -84,8 +84,19 @@ function validTime(req, res, next) {
 	next();
 }
 
+function addADay(currentDate) {
+  let [ year, month, day ] = currentDate.split("-");
+  month -= 1;
+  const date = new Date(year, month, day);
+  date.setMonth(date.getMonth());
+  date.setDate(date.getDate() + 1);
+  return asDateString(date);
+}
+
 function validDay(req, res, next) {
 	let reservation = req.body.data;
+  let offset = req.body.offset;
+  console.log("offset", offset)
 
 	// check time is in HH:MM format
 	const timeRegex = /\d{2}\:\d{2}/g;
@@ -111,9 +122,25 @@ function validDay(req, res, next) {
 	const currentUTCTime = currentDate.toISOString().slice(11, 16);
 
 	// convert reservation date & time to ISO string
-	const resUTC = new Date(`${reservation.reservation_date}T${reservation.reservation_time}`);
-	const resUTCDate = resUTC.toISOString().slice(0, 10);
-	const resUTCTime = resUTC.toISOString().slice(11, 16);
+  const totalInMinutes = (parseInt(reservation.reservation_time.split(":")[0]) * 60) + parseInt(reservation.reservation_time.split(":")[1]);
+  const UTCInMinutes = totalInMinutes + offset;
+
+  let H = Math.floor(UTCInMinutes / 60);
+  let M = UTCInMinutes % 60
+
+  let resUTCDate = reservation.reservation_date;
+
+  if (H > 24){
+    H = H - 24;
+    resUTCDate = addADay(resUTCDate)
+  }
+
+
+	const resUTCTime = H + ':' + M;
+
+  console.log("resUTCDate", resUTCDate)
+  console.log("resUTCTime", resUTCTime)
+	
 
 	const invalidDay = 'Cannot make reservation for that day,';
 

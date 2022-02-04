@@ -80,15 +80,16 @@ function Reservations() {
         setErrors([]);
         setApiError(null);
         const abortController = new AbortController();
+        const localTime = new Date()
 
         if( handleValidation() ){
             if (reservation_id) {
-                try { await editReservation(reservation_id, {...formData, people: parseInt(formData.people)}, AbortController.signal); }
+                try { await editReservation(reservation_id, {...formData, people: parseInt(formData.people)}, localTime.getTimezoneOffset(), AbortController.signal); }
                 catch(e){ setApiError(e)
                 return () => abortController.abort(); }
 
             } else {
-            try { await createReservation({...formData, people: parseInt(formData.people)}, AbortController.signal); }
+            try { await createReservation({...formData, people: parseInt(formData.people)}, localTime.getTimezoneOffset(), AbortController.signal); }
             catch(e){ setApiError(e)
             return () => abortController.abort(); }
         }
@@ -109,16 +110,18 @@ function Reservations() {
             }
         }
 
+        // convert current date & time to ISO string
         const currentDate = new Date()
         const currentUTCDate = currentDate.toISOString().slice(0, 10);
         const currentUTCTime = currentDate.toISOString().slice(11, 16);
 
 
         // convert reservation date & time to ISO string
-
         let resUTC = 0;
         let resUTCDate = 0;
         let resUTCTime = 0;
+
+        //conversion if date is ISO timestring as in tests
         if (formData.reservation_date.includes("Z")){
             resUTCDate = formData.reservation_date.slice(0, 10);
             formData.reservation_date = resUTCDate;
@@ -162,7 +165,6 @@ function Reservations() {
             validationErrors.push(new Error ("Resturant closed after 9:30 PM"));
         }
         
-        console.log(validationErrors)
         setErrors(validationErrors);     
         return formIsValid;
     }

@@ -51,15 +51,15 @@ async function fetchJson(url, options, onCancel) {
     return Promise.resolve(onCancel);
   }
 }
-export async function createReservation(reservation, signal) {
+export async function createReservation(reservation, timezoneOffset, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
-  const body = JSON.stringify({ data: reservation });
+  const body = JSON.stringify({ data: reservation, offset: timezoneOffset });
   return await fetchJson(url,{headers, signal, method: "POST", body}, []);
 }
 
-export async function editReservation(reservation_id, reservation, signal) {
+export async function editReservation(reservation_id, reservation, timezoneOffset, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
-  const body = JSON.stringify({ data: reservation });
+  const body = JSON.stringify({ data: reservation, offset: timezoneOffset });
   console.log("edit body", body)
   return await fetchJson(url,{headers, signal, method: "PUT", body}, []);
 }
