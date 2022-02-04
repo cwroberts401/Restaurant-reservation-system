@@ -59,16 +59,15 @@ function Reservations() {
           [target.name]: target.value,
         });
 
+
+        //adds -'s while typing phone number to format it correctly
         if (target.name === "mobile_number"){
             if ((target.value.length === 4 || target.value.length === 8) && target.value.includes("-")){
-                console.log("howdy")
                 let val;
                 target.value.length === 4? val = target.value.slice(0,3): val = target.value.slice(0,7);
-                console.log(target.value.slice(0,2))
                 setFormData({...formData, [target.name]: val});
             }
             else if ((target.value.length === 3 || target.value.length === 7)){
-                    console.log("added")
                     setFormData({...formData, [target.name]:target.value += "-"});
             }
         }
@@ -79,33 +78,35 @@ function Reservations() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         setErrors([]);
-        console.log("hihi")
+        setApiError(null);
+        const abortController = new AbortController();
 
         if( handleValidation() ){
             if (reservation_id) {
-                console.log("hihiHi")
-                await editReservation(reservation_id, {...formData, people: parseInt(formData.people)}, AbortController.signal);
-                console.log("edited");
-                history.push(`/dashboard`);
+                try { await editReservation(reservation_id, {...formData, people: parseInt(formData.people)}, AbortController.signal); }
+                catch(e){ setApiError(e)
+                return () => abortController.abort(); }
 
             } else {
-            await createReservation({...formData, people: parseInt(formData.people)}, AbortController.signal);
-            console.log("created"); }
+            try { await createReservation({...formData, people: parseInt(formData.people)}, AbortController.signal); }
+            catch(e){ setApiError(e)
+            return () => abortController.abort(); }
+        }
             history.push(`/dashboard?date=${formData.reservation_date}`); 
         
-        } else {console.log("rejected");};
+        } else { console.log("rejected") };
     }
 
     function handleValidation(){
         let validationErrors = [];
         let formIsValid = true;
 
-        if (formData.reservation_date === "" || formData.reservation_time === "" ){
-            formIsValid = false;
-            validationErrors.push(new Error ("Please provide a date and time"));
-            setErrors(validationErrors); 
-            return formIsValid;
-
+        for (const field in formData){
+            if (formData[field] === ""){
+                validationErrors.push(new Error (`${field.replace('_',' ')} cannot be left blank.`));
+                setErrors(validationErrors);
+                return formIsValid = false;
+            }
         }
 
         const currentDate = new Date()
@@ -182,34 +183,34 @@ function Reservations() {
         <div className="row justify-content-center mb-4">
           <div className="col-md-4">
             <label htmlFor="first_name" className="form-label mx-2">First Name</label>
-            <input type="text" className="form-control mx-2" id="first_name" name="first_name" onChange={handleChange} value={formData.first_name} required/>
+            <input type="text" className="form-control mx-2" id="first_name" placeholder="John" name="first_name" onChange={handleChange} value={formData.first_name}/>
           </div>
           <div className="col-md-4">
-            <label htmlFor="name" className="form-label mx-2">Last Name</label>
-            <input type="text" className="form-control mx-2" id="last_name" placeholder="Smith" name="last_name" onChange={handleChange} value={formData.last_name} required/>
+            <label htmlFor="last_name" className="form-label mx-2">Last Name</label>
+            <input type="text" className="form-control mx-2" id="last_name" placeholder="Smith" name="last_name" onChange={handleChange} value={formData.last_name}/>
           </div>
           <div className="col-md-4">
-            <label htmlFor="name" className="form-label mx-2">Mobile Number</label>
-            <input type="tel" className="form-control mx-2" id="mobile_number" placeholder="000-000-0000" name="mobile_number" onChange={handleChange} value={formData.mobile_number} required/>
+            <label htmlFor="mobile_number" className="form-label mx-2">Mobile Number</label>
+            <input type="tel" className="form-control mx-2" id="mobile_number" placeholder="000-000-0000" name="mobile_number" onChange={handleChange} value={formData.mobile_number}/>
           </div>
         </div>
         <div className="row justify-content-center mb-4">
           <div className="col-md-4">
-            <label htmlFor="name" className="form-label mx-2">Reservation Date</label>
-            <input type="date" className="form-control mx-2" id="reservation_date" placeholder="11/11/2022" name="reservation_date" onChange={handleChange} value={formData.reservation_date} required/>
+            <label htmlFor="reservation_date" className="form-label mx-2">Reservation Date</label>
+            <input type="date" className="form-control mx-2" id="reservation_date" placeholder="11/11/2022" name="reservation_date" onChange={handleChange} value={formData.reservation_date}/>
           </div>
           <div className="col-md-4">
-            <label htmlFor="name" className="form-label mx-2">Reservation Time</label>
-            <input type="time" className="form-control mx-2" id="reservation_time" placeholder="11:10 AM" name="reservation_time" onChange={handleChange} value={formData.reservation_time} required/>
+            <label htmlFor="reservation_time" className="form-label mx-2">Reservation Time</label>
+            <input type="time" className="form-control mx-2" id="reservation_time" placeholder="11:10 AM" name="reservation_time" onChange={handleChange} value={formData.reservation_time}/>
           </div>
           <div className="col-md-4">
-            <label htmlFor="name" className="form-label mx-2">People</label>
-            <input type="number" className="form-control mx-2" id="people" placeholder="2" name="people" onChange={handleChange} value={formData.people} required/>
+            <label htmlFor="people" className="form-label mx-2">People</label>
+            <input type="number" className="form-control mx-2" id="people" placeholder="2" name="people" onChange={handleChange} value={formData.people}/>
           </div>
         </div>
         <div className="row justify-content-center">
-        <button type="button" onClick ={cancelHandler} className="btn btn-secondary mr-2"> cancel </button>
-        <button type="submit" onClick ={handleSubmit} value="submit" className="btn btn-primary mr-2" > submit </button>
+        <button onClick ={cancelHandler} className="btn btn-secondary mr-2"> cancel </button>
+        <button type="submit" onClick={handleSubmit} className="btn btn-primary mr-2" > submit </button>
         </div>
         </div>
         </form>

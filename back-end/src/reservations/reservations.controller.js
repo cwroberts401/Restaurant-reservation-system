@@ -136,7 +136,7 @@ function validDay(req, res, next) {
 	if (resUTCDate === currentUTCDate && resUTCTime < currentUTCTime) {
 			return next({
 				status: 400,
-				message: `${invalidDay} time must be in the future.`
+				message: `${invalidDay} time must be in the future. resUTCTime:${resUTCTime} currentUTCTime:${currentUTCTime} currentDate:${currentDate} resUTC: ${resUTC}`
 			});
 	}
 

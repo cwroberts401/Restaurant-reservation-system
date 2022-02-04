@@ -18,6 +18,7 @@ function Dashboard({ date }) {
 
   const query= useQuery().get("date");
   if (query) date = query;
+  console.log(date)
 
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
