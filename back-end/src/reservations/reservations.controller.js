@@ -85,12 +85,11 @@ function validTime(req, res, next) {
 }
 
 function addADay(currentDate) {
-	let [ year, month, day ] = currentDate.split('-');
-	month -= 1;
-	const date = new Date(year, month, day);
-	date.setMonth(date.getMonth());
-	date.setDate(date.getDate() + 1);
-	return asDateString(date);
+
+    let result = new Date(currentDate);
+    result.setDate(result.getDate() + 1);
+    return result.toISOString().slice(0, 10);
+
 }
 
 function validDay(req, res, next) {
