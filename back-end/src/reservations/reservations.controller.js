@@ -130,6 +130,7 @@ function validDay(req, res, next) {
 
 	if (H > 24) {
 		H = H - 24;
+    resUTCDate = addADay(resUTCDate)
 	}
 
 	const resUTCTime = H + ':' + M;
