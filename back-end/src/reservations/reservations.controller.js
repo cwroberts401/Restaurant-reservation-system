@@ -137,7 +137,7 @@ function validDay(req, res, next) {
 
 	const invalidDay = 'Cannot make reservation for that day,';
 
-	if (new Date(reservation.reservation_date).getDay() === 2) {
+	if (new Date(reservation.reservation_date).getUTCDay() === 2) {
 		return next({
 			status: 400,
 			message: `${invalidDay} restaurant closed.`
