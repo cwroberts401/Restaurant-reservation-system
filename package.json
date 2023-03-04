@@ -1,6 +1,7 @@
 {
   "name": "starter-restaurant-reservation",
   "version": "1.0.0",
+  "homepage": "https://cwroberts401.github.io/Restaurant-reservation-system",
   "description": "Starter project restaurant reservation system",
   "private": true,
   "repository": {
@@ -8,6 +9,8 @@
     "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "build": "npm -prefix front-end run build",
     "preinstall": "cd ./back-end && npm install",
     "install": "cd ./front-end && npm install",
@@ -50,5 +53,8 @@
   "license": "UNLICENSED",
   "dependencies": {
     "knex": "^1.0.1"
+  },
+  "devDependencies": {
+    "gh-pages": "^5.0.0"
   }
 }
