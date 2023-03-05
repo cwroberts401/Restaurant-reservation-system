@@ -4,8 +4,6 @@
 
 This simple app was created to allow users to easily create, edit, and keep track of reservations made over the phone or in person. It uses a simple interface that clearly shows the status of all tables and reservations in one place.
 
-## Live Site
-The live site deployed with Heroku can be found here: [https://cr-reservation-client.herokuapp.com/](https://cr-reservation-client.herokuapp.com/)
 
 
 ## Features
