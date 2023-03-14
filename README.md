@@ -4,7 +4,7 @@
 
 This simple app was created to allow users to easily create, edit, and keep track of reservations made over the phone or in person. It uses a simple interface that clearly shows the status of all tables and reservations in one place.
 
-
+Link to deployed site [here](https://restaurant-reservation-system-3kjo.onrender.com/dashboard).
 
 ## Features
 ### Dashboard
